@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Editor
+.vscode/
+.idea/
+
+# Local data: search results contain contact data of real businesses and must
+# never be committed. The cache holds downloaded map data and visited pages.
+results/
+.cache/
+
+# Secrets
+.env
