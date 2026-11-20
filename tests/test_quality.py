@@ -72,3 +72,17 @@ def test_phone_from_other_source_fills_gap():
                           phones=["+491711234567"])
     conflate([osm], [place])
     assert osm.phone == "+491711234567"
+
+
+def test_demo_files_are_copied_into_an_empty_results_folder(tmp_path, monkeypatch):
+    from b2b_email_finder.cli import _seed_demo_results
+
+    demo, results = tmp_path / "demo", tmp_path / "results"
+    demo.mkdir()
+    (demo / "koeln.json").write_text("{}")
+    monkeypatch.setenv("B2B_DEMO_DIR", str(demo))
+    _seed_demo_results(results)
+    assert (results / "koeln.json").exists()
+    (demo / "other.json").write_text("{}")
+    _seed_demo_results(results)  # results folder not empty any more: nothing is added
+    assert not (results / "other.json").exists()

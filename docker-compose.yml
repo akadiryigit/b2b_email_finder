@@ -1,0 +1,17 @@
+services:
+  app:
+    build: .
+    image: b2b-email-finder
+    ports:
+      - "8501:8501"
+    volumes:
+      - b2b_data:/data   # results and saved work survive restarts
+    environment:
+      # Optional. Passed through from your shell if set; never stored in the image.
+      - BRAVE_API_KEY
+      - FSQ_PLACES_PARQUET
+      - B2B_EMAIL_FINDER_UA
+    restart: unless-stopped
+
+volumes:
+  b2b_data:

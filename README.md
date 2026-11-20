@@ -46,7 +46,30 @@ Coverage differs a lot by type of shop:
 Most kiosks have no website at all, so no public email exists for them. That is the main
 limit of this approach.
 
-## Quick start
+## Run with Docker (easiest)
+
+You only need Docker (Docker Desktop or Rancher Desktop).
+
+```bash
+git clone https://github.com/akadiryigit/b2b_email_finder.git
+cd b2b_email_finder
+docker compose up
+```
+
+Then open **http://localhost:8501**. The first build takes a few minutes.
+
+- Result files in the `demo/` folder are shown right away, so you can explore the app
+  without running a search first.
+- Start a new search from the sidebar in the app, or from the command line:
+  ```bash
+  docker compose run --rm app b2b-email-finder search --area "Bonn" --out results/bonn
+  ```
+- Results and saved work are kept in a Docker volume and survive restarts. Remove them with
+  `docker compose down -v`.
+- Optional keys are passed through from your shell, for example
+  `BRAVE_API_KEY=... docker compose up`.
+
+## Run without Docker
 
 You need Python 3.10 or newer. On Windows, use WSL.
 
@@ -158,7 +181,8 @@ This is not legal advice.
 - **Credit the data.** OpenStreetMap data is under the ODbL licence: credit
   "© OpenStreetMap contributors". Overture data is under CDLA-Permissive 2.0.
 - **Don't publish result files.** They contain contact data of real businesses. The
-  `results/` folder is excluded from git.
+  `results/` folder is excluded from git. Only put result files into `demo/` if the
+  repository is private.
 
 ## Next steps
 

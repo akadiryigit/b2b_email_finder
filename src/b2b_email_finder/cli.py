@@ -4,6 +4,7 @@ import argparse
 import asyncio
 import logging
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -71,6 +72,16 @@ def _parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _seed_demo_results(results_dir: Path) -> None:
+    """First start: copy the bundled example files (B2B_DEMO_DIR) into an empty results folder."""
+    demo_dir = os.environ.get("B2B_DEMO_DIR")
+    if not demo_dir or any(results_dir.glob("*.json")):
+        return
+    results_dir.mkdir(parents=True, exist_ok=True)
+    for example in Path(demo_dir).glob("*.json"):
+        shutil.copy(example, results_dir / example.name)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = _parser()
     args, extra = parser.parse_known_args(argv)
@@ -85,6 +96,7 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "ui":
         # Streamlit runs a script file, so we start it as a subprocess.
+        _seed_demo_results(args.results_dir)
         app = Path(__file__).with_name("app.py")
         env = {**os.environ, "B2B_RESULTS_DIR": str(args.results_dir.resolve())}
         command = [sys.executable, "-m", "streamlit", "run", str(app), "--server.port", str(args.port)]
